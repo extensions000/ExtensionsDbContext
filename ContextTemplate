@@ -1,0 +1,28 @@
+//Use this as your DbContext
+public class ApplicationDbContext : AppDbContext
+    {
+        public static string ConnectionString { get; set; }
+
+        public CRUDApplicationDbContext()
+        {
+            ChangeTracker.LazyLoadingEnabled = false;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
+        {
+            if (!optionBuilder.IsConfigured)
+            {
+                optionBuilder.UseSqlServer(ConnectionString);
+            }
+            base.OnConfiguring(optionBuilder);
+        }
+
+        public static void BuildConnectionString(string connectionString)
+        {
+            var connString = new SqlConnectionStringBuilder
+            {
+                ConnectionString = connectionString
+            };
+            ConnectionString = connString.ConnectionString;
+        }
+    }
